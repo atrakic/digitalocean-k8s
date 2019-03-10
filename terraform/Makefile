@@ -13,9 +13,12 @@ TERRAFORM_FLAGS = -var "token=$(DO_TOKEN)"  \
 		-var "k8s_version=$(K8S_VERSION)"  \
 		-var "node_count=$(K8S_NODE_COUNT)"
 
-all: validate init plan 
+all: install init validate plan
 
-init:
+install:
+	@docker pull $(DOCKER_IMAGE) &>/dev/null
+
+init: ## Initilise empty terraform env
 	@docker run -it --rm -w $$PWD -v $$PWD:$$PWD $(DOCKER_IMAGE) init \
 		$(TERRAFORM_FLAGS)
 
@@ -23,7 +26,7 @@ plan:
 	@docker run -it --rm -w $$PWD -v $$PWD:$$PWD $(DOCKER_IMAGE) plan \
 		$(TERRAFORM_FLAGS)
 
-apply: ## 
+apply: ## Builds or changes infrastructure
 	@docker run -it --rm -w $$PWD -v $$PWD:$$PWD $(DOCKER_IMAGE) apply \
 		$(TERRAFORM_FLAGS)
 
@@ -45,6 +48,9 @@ validate-fmt:
 
 validate: ## Validates the Terraform files
 	@docker run -it --rm -w $$PWD -v $$PWD:$$PWD $(DOCKER_IMAGE) validate -check-variables=false . && echo "[OK] terraform validated"
+
+clean: ## Clean up
+	@rm -rf *.tfstate *.tfstate.backup $(TERRAFORM) .terraform/* >/dev/null
 
 .PHONY: help
 help:
