@@ -30,14 +30,16 @@ $ make output # prints usage instructions with kubectl
 
 or as terraform module:
 ``` hcl
+variable "name"  {}
+variable "token" {}
 
 module "my_do_k8s" {
   source  = "github.com/atrakic/digitalocean-k8s/terraform"
 
-  name       = "my-k8s"
-  token      = "YOUR_DIGITALOCEAN_TOKEN"
+  name       = "${var.,name}"
+  token      = "${var.token}"
 
-  # optinals
+  # optionals
   region     = "ams2"    # https://www.digitalocean.com/docs/platform/availability-matrix/
   node_count = "3"
 }
