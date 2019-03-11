@@ -1,3 +1,9 @@
+data "digitalocean_kubernetes_cluster" "k8s" {
+  name = "${var.name}"
+
+  depends_on = ["digitalocean_kubernetes_cluster.k8s"]
+}
+
 provider "kubernetes" {
   host = "${data.digitalocean_kubernetes_cluster.k8s.endpoint}"
   client_certificate     = "${base64decode(data.digitalocean_kubernetes_cluster.k8s.kube_config.0.client_certificate)}"
