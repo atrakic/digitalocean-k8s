@@ -61,8 +61,8 @@ For price and documentation:
 (https://www.digitalocean.com/products/kubernetes/).
 
 ## TODO
-- Add support for Block Storage volumes
-- Add support for Load Balancers
+- [ ] Add support for Block Storage volumes
+- [ ] Add support for Load Balancers
 
 ## License
 digitalocean-k8s is licensed under the MIT license.
